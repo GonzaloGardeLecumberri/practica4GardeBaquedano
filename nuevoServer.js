@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
+var port = process.env.PORT || 8080;
+
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -84,8 +86,8 @@ app.get('/reset', function(request, response){
 });
 
 
-app.listen(8080, function (argument) {
-	console.log('Escuchando en el puerto 8080');
+app.listen(port, function (argument) {
+	console.log('Escuchando en el puerto');
 });
 
-server.listen(8081);
+server.listen();

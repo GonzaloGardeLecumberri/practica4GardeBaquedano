@@ -1,0 +1,26 @@
+{
+  "name": "practica4-garde-baque",
+  "version": "1.0.0",
+  "description": "",
+  "main": "nuevoServer.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "pug": "^2.0.1",
+    "socket.io": "^2.0.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GonzaloGardeLecumberri/practica4GardeBaquedano.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GonzaloGardeLecumberri/practica4GardeBaquedano/issues"
+  },
+  "homepage": "https://github.com/GonzaloGardeLecumberri/practica4GardeBaquedano#readme"
+}
