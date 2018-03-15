@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="http://localhost:8081/socket.io/socket.io.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css" >
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" >
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-grid.css" >
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-grid.min.css" >
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-reboot.css" >
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-reboot.min.css" >
+	<link rel="stylesheet" type="text/css" href="css/fontawesome-all.css" >
+
+	<title>Paco Paco</title>
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-light bg-dark">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#"><img  class="img-responsive" src="logo-parlamento.png" alt="Logo1"></a>
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#datos">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="datos">
+				<ul class="nav navbar-bar ">
+					<a class="nav-link " href="/">
+						Selector de Productos
+					</a>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container-fluid mt-3">
+		<div class="row">
+			<div class="col-6">
+				<div class="row">
+					<div class="form-group col-12">
+						<form id='formPrincipal'>
+							<label for="producto"> Selector de productos:</label>
+							<select class="form-control" id="producto" name="producto">
+								<option value="Toro">Toro</option>
+								<option value="Lemur">Mono</option>
+								<option value="Kiwi">Kiwi</option>
+							</select>
+							<button type="submit" class="btn btn-primary mb-2 mt-2">Seleccionar Producto</button>
+						</form>
+					</div>
+				</div>
+				<div id="resultado" class="row">
+						
+				</div>
+			</div>
+			<div class="col-6">
+				<div class="row" id="mensajesRecibidos">
+					
+				</div>
+				<hr>
+				<div class="row enviarMensaje">
+					<div class="form-group col-12">
+						<form id="formMensaje" method="POST">
+							<label for="mensajeUsuario">Introduzca su mensaje para enviar</label>
+							<textarea class="form-control" id="mensajeUsuario" rows="3" name="mensaje"></textarea>
+							<button type="submit" class="btn btn-primary mb-2 mt-2">Enviar</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/fontawesome-all.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#formPrincipal').on('submit', function(event) {
+			event.preventDefault();
+			/* Act on the event */
+			var pedir = '/producto/'+$("#producto option:selected").val();
+			$.ajax(pedir, {
+				type: 'POST',
+				data: $('#formPrincipal').serialize(),
+				success: function(result){
+					$("#resultado").empty();
+					$("#resultado").html(result).slideDown();
+				}
+			});
+		});
+
+		$('#resultado').on('submit','form', function(event) {
+			event.preventDefault();
+
+			var productoPedido = $('#escogido').attr('p-value');
+			var pedir = '/actualizarProducto/'+productoPedido;
+			var cantidadPedida = $("#pedido").val();
+			$.ajax({
+					url: pedir,
+					type: "POST",
+					data: {cantidad: cantidadPedida},
+					success: function(result){
+						$('#formPrincipal').trigger('submit');
+					}
+			});
+		});
+
+		var socket = io.connect('http://localhost:8081');
+
+		$('#formMensaje').on('submit', function(event) {
+			event.preventDefault();
+			var mensaje = $('#formMensaje textarea[name=mensaje]').val();
+			var anadir= `
+				<div class='col-12 text-right text-success bg-warning py-1 my-1'>
+					${mensaje}
+				</div>
+			`;
+			$('#mensajesRecibidos').append(anadir);
+			socket.emit('mensajeChat', {info: mensaje});
+		});
+
+		socket.on('mensajeChat', function(datos){
+			var anadir2= `
+				<div class='col-12 text-left text-black bg-secondary py-1 my-1'>
+					${datos.info}
+				</div>
+			`;
+			$('#mensajesRecibidos').append(anadir2);
+		})
+	});
+</script>
+
+</body>

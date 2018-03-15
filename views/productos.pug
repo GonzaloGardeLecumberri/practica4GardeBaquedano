@@ -1,0 +1,18 @@
+div(class='col-12')
+	p(class='h3' id='escogido' p-value=nombre) #{nombre}
+	if disponible
+		div(class='col-12')
+			p #{descripcion}
+			p Actualmente disponemos de #{cantidad} unidades
+			p El precio de venta es de #{precio} euros
+		div(class='form-group col-12')
+			form(id='formSecundario')
+				label(for='pedido') Haga su pedido
+				input(type='number' id='pedido' class='form-control' name='cantidadPedida' placeholder='0' min='0' max=cantidad)
+				button(type='submit' class='btn btn-primary mb-2 mt-2') Encargar producto
+	else
+		div(class='row')
+			div(class='col-12')
+				p Parece que se nos ha agotado el producto, en breve tendremos mas. (Pedir la pagina /reset)
+
+	
