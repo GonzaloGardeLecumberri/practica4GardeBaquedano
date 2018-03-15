@@ -86,8 +86,6 @@ app.get('/reset', function(request, response){
 });
 
 
-app.listen(port, function (argument) {
+server.listen(port, function (argument) {
 	console.log('Escuchando en el puerto');
 });
-
-server.listen();
